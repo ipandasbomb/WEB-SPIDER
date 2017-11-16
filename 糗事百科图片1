@@ -1,0 +1,16 @@
+import requests
+from bs4 import BeautifulSoup
+import urllib.request
+
+url = "https://www.qiushibaike.com/imgrank/"
+wb_data = requests.get(url)
+soup = BeautifulSoup(wb_data.text,'lxml')
+images = soup.select('div.thumb > a > img')   #or  'img.illustration'    or   div.thumb > a > img
+#print(images)
+x = 0
+for img in images:
+    link = img.get('src')
+    links = 'https:'+link
+    urllib.request.urlretrieve(links,'d:/我的电脑/图片/Image/'+ str(x)+'.jpg')
+    x +=1
+    print(links)
