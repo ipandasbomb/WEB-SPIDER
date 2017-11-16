@@ -1,0 +1,52 @@
+from bs4 import BeautifulSoup
+import requests
+
+def get_item_info(url):
+   # url = 'http://zhuanzhuan.58.com/detail/913387772462628872z.shtml?fullCate=5%2C38484%2C23094&fullLocal=858&from=pc&PGTID=0d305a36-0035-a81b-a6ae-318878a2a30c&ClickID=1'
+    wb_data = requests.get(url)
+    soup = BeautifulSoup(wb_data.text,'lxml')
+
+    title_list = soup.select('h1.info_titile')
+    price_list = soup.select('span.price_now > i')
+    areas_list = soup.select('div.palce_li > span > i')
+    label_list = soup.select('div.biaoqian_li')
+    views_list = soup.select('p.info_p')
+    descs_list = soup.select('div.box_left > div > div > div > p')
+    wants_list = soup.select('div.info_massege.left > div.want_li > span.want_right > span')
+    cates_list = soup.select('div > span.crb_i > a ')
+
+    # text列表可读处理，去除空格以及各种字母符号。 strip()去除行号以及空格
+    title = title_list[0].text   #titles_list[].text 采用了列表可读处理。titles_list[0]表示第一个元素
+    price = price_list[0].text
+    areas = areas_list[0].text
+    label = label_list[0].text.strip()
+    views = views_list[0].text
+    descs = descs_list[0].text
+    cates = cates_list[-1].text.strip()
+    print(cates)
+''''''
+    #键值对，把获取的信息放入字典
+    data = {
+        'title':title,
+        'price':price,
+        'areas':areas,
+        'label':label,
+        'views':views,
+        'descs':descs,
+        'cates':cates,
+    }
+    print(data)
+
+def get_all_items_info():
+    url = 'http://yc.58.com/pbdn/'
+    wb_data = requests.get(url)
+    soup = BeautifulSoup(wb_data.text,'lxml')
+    hrefs_list = soup.select('a.t')    #titles_list = soup.select('td.t > a.t')此行代码参考58.py。
+    for href in hrefs_list:            #58二手市场首页的标题链接地址是td.t > a.t 或者a.t。
+        link = href.get('href')
+        if 'zhuanzhuan' in link:      #但是里面有很多的推广链接。如此就不好筛选了，因此下面采用了for  in  结构
+            get_item_info(link)
+get_all_items_info()
+
+
+# follow tutorials by nobody
