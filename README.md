@@ -1,2 +1,2 @@
 # WEB-SPIDER
-Show schemes of web-spider
+Show some schemes of web-spider
