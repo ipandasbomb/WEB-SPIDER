@@ -1,0 +1,25 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import requests
+import re
+import urllib.request
+
+def getHtml(url):
+    page = requests.get(url)
+    html = page.text
+    return html
+
+def getImg(html):
+    reg = r'src="(.+?\.jpg)" alt'
+    imgre = re.compile(reg)
+    imglist = re.findall(imgre,html)
+    x = 0
+    for imgurl in imglist:
+        urllib.request.urlretrieve("https:"+imgurl,'%s.jpg' % x)
+        x+=1
+
+
+html = getHtml("https://www.qiushibaike.com/imgrank/")
+print (getImg(html))
+
+#by 凉白开
